@@ -8,9 +8,17 @@ import java.util.*;
 
 public class ReservationService {
 
-    private static ReservationService reference = new ReservationService();
-    private Set<Reservation> reservationList;
-    private Set<IRoom> roomList;
+    private static ReservationService instance = new ReservationService();
+    private ArrayList<Reservation> reservationList;
+    private ArrayList<IRoom> roomList;
+
+    private ReservationService() {
+        this.reservationList = new ArrayList<Reservation>();
+        this.roomList = new ArrayList<IRoom>();
+    }
+    public static ReservationService getInstance() {
+        return instance;
+    }
 
     public void addRoom(IRoom room) {
         roomList.add(room);
@@ -37,8 +45,8 @@ public class ReservationService {
         Collection<IRoom> availableRooms = new ArrayList<IRoom>(roomList);
         // Iterate over existing reservations and remove any rooms that are taken for given date.
         for (Reservation rez : reservationList) {
-            if (checkInDate > rez.checkOutDate) {
-                availableRooms.removeIf(room -> room == rez.IRoom);
+            if (checkInDate.compareTo(rez.checkOutDate) > 0 ){
+                availableRooms.removeIf(room -> room == rez.room);
             }
         }
         return availableRooms;
@@ -46,7 +54,7 @@ public class ReservationService {
     public Collection<Reservation> getCustomerReservation(Customer customer) {
         Collection<Reservation> customerReservations = new ArrayList<Reservation>();
         for (Reservation rez : reservationList) {
-            if (rez.Customer() == customer) {
+            if (rez.customer == customer) {
                 customerReservations.add(rez);
             }
         }

@@ -2,14 +2,22 @@ package service;
 
 import Models.Customer;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.NoSuchElementException;
-import java.util.Set;
 
 public class CustomerService {
 
-    private static CustomerService reference = new CustomerService();
-    private Set<Customer> customerList;
+    private static CustomerService instance = new CustomerService();
+    private ArrayList<Customer> customerList;
+
+    private CustomerService() {
+        this.customerList = new ArrayList<Customer>();
+    }
+    public static CustomerService getInstance(){
+        return instance;
+    }
+
 
     public void addCustomer(String email, String firstName, String lastName) {
         Customer newCustomer = new Customer(firstName, lastName, email);
