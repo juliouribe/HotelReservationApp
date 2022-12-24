@@ -12,6 +12,11 @@ import java.util.NoSuchElementException;
 
 public class HotelResource {
 
+    private static HotelResource instance = new HotelResource();
+    public static HotelResource getInstance(){
+        return instance;
+    }
+
     public Customer getCustomer(String email) {
         return CustomerService.getInstance().getCustomer(email);
     }

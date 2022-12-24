@@ -20,6 +20,9 @@ public class ReservationService {
         return instance;
     }
 
+    public Collection<IRoom> getAllRooms() {
+        return roomList;
+    }
     public void addRoom(IRoom room) {
         roomList.add(room);
     }
