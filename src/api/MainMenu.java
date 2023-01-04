@@ -4,14 +4,25 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import Models.Customer;
-import api.HotelResource;
+
+import javax.sound.midi.SysexMessage;
 
 public class MainMenu {
-    // Set up scanner
     public static void main(String[] args) {
         Customer currentCustomer = new Customer("Keren", "Zendejas", "kerenz@gmail.com");
         Scanner scanner = new Scanner(System.in);
-        try {
+        Boolean runApp = true;
+        Boolean loggedIn = false;
+        Boolean isAdmin = false;
+        String adminPassword = "supersecretpassword";
+        ArrayList<String> validOptions = new ArrayList<String>();
+        validOptions.add("1");
+        validOptions.add("2");
+        validOptions.add("3");
+        validOptions.add("4");
+        validOptions.add("5");
+
+        while (runApp) {
             System.out.println("______________________");
             System.out.println("1. Find and reserve a room");
             System.out.println("2. See my reservation");
@@ -21,13 +32,6 @@ public class MainMenu {
             System.out.println("______________________");
             System.out.println("Please select a number for the menu option");
             String userChoice = scanner.nextLine();
-
-            ArrayList<String> validOptions = new ArrayList<String>();
-            validOptions.add("1");
-            validOptions.add("2");
-            validOptions.add("3");
-            validOptions.add("4");
-            validOptions.add("5");
 
             if (validOptions.contains(userChoice)) {
                 if (userChoice == "1") {
@@ -58,22 +62,24 @@ public class MainMenu {
 
                 } else if (userChoice == "4"){
                     // Admin
-
+                    System.out.println("Please enter the admin password");
+                    String password = scanner.nextLine();
+                    if (password == adminPassword) {
+                        isAdmin = true;
+                    } else {
+                        System.out.println("The admin password was incorrect. Please try again from the main menu.");
+                    }
 
                 } else if (userChoice == "5"){
                     // Exit
+                    runApp = false;
                 }
+            } else {
+                // If no valid choice enter, re-run loop.
+                System.out.println("Please enter a valid choice of 1-5.");
+                System.out.println();
             }
-
-        } catch (Exception ex) {
-            ex.getLocalizedMessage();
-        } finally {
-            scanner.close();
         }
-
+        scanner.close();
     }
-
-
-
-
 }
