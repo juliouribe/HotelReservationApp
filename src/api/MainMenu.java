@@ -23,14 +23,7 @@ public class MainMenu {
         validOptions.add("5");
 
         while (runApp) {
-            System.out.println("______________________");
-            System.out.println("1. Find and reserve a room");
-            System.out.println("2. See my reservation");
-            System.out.println("3. Create an Account");
-            System.out.println("4. Admin");
-            System.out.println("5. Exit");
-            System.out.println("______________________");
-            System.out.println("Please select a number for the menu option");
+            printMainMenu();
             String userChoice = scanner.nextLine();
 
             if (validOptions.contains(userChoice)) {
@@ -45,33 +38,18 @@ public class MainMenu {
                     Display successful reservation information
                      */
                 } else if (userChoice == "2"){
-                    // See my reservation
                     HotelResource.getInstance().getCustomerReservations(currentCustomer.email);
-
                 } else if (userChoice == "3"){
-                    // Create an account
-                    System.out.println("Please enter a first name, last name, and email.");
-                    System.out.println("Ex: Joe Mama jmom@abc.com");
-                    String newCustomerDetails = scanner.nextLine();
-                    String[] contactInfo = newCustomerDetails.split("\\s+");
-                    String first = contactInfo[0];
-                    String last = contactInfo[1];
-                    String email = contactInfo[2];
-                    HotelResource.getInstance().createACustomer(first, last, email);
-                    System.out.println("New customer account successfully created!");
-
+                    createUserAccount(scanner);
                 } else if (userChoice == "4"){
-                    // Admin
-                    System.out.println("Please enter the admin password");
-                    String password = scanner.nextLine();
-                    if (password == adminPassword) {
-                        isAdmin = true;
+                    isAdmin = adminLogin(scanner, adminPassword);
+                    if (isAdmin) {
+                        System.out.println("Admin logged in");
+                        // call admin menu function.
                     } else {
-                        System.out.println("The admin password was incorrect. Please try again from the main menu.");
+                        System.out.println("Sorry, that admin password is incorrect.");
                     }
-
                 } else if (userChoice == "5"){
-                    // Exit
                     runApp = false;
                 }
             } else {
@@ -81,5 +59,36 @@ public class MainMenu {
             }
         }
         scanner.close();
+    }
+    private static void printMainMenu() {
+        System.out.println("______________________");
+        System.out.println("1. Find and reserve a room");
+        System.out.println("2. See my reservation");
+        System.out.println("3. Create an Account");
+        System.out.println("4. Admin");
+        System.out.println("5. Exit");
+        System.out.println("______________________");
+        System.out.println("Please select a number for the menu option");
+    }
+    private static void createUserAccount(Scanner scanner) {
+        System.out.println("Please enter a first name, last name, and email.");
+        System.out.println("Ex: Joe Mama jmom@abc.com");
+        String newCustomerDetails = scanner.nextLine();
+        String[] contactInfo = newCustomerDetails.split("\\s+");
+        String first = contactInfo[0];
+        String last = contactInfo[1];
+        String email = contactInfo[2];
+        HotelResource.getInstance().createACustomer(first, last, email);
+        System.out.println("New customer account successfully created!");
+    }
+    private static Boolean adminLogin(Scanner scanner, String adminPassword) {
+        System.out.println("Please enter the admin password");
+        String password = scanner.nextLine();
+        if (password == adminPassword) {
+            return true;
+        } else {
+            System.out.println("The admin password was incorrect. Please try again from the main menu.");
+            return false;
+        }
     }
 }
