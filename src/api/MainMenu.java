@@ -5,13 +5,11 @@ import java.util.Scanner;
 
 import Models.Customer;
 
-import javax.sound.midi.SysexMessage;
-
 public class MainMenu {
     public static void main(String[] args) {
         Customer currentCustomer = new Customer("Keren", "Zendejas", "kerenz@gmail.com");
         Scanner scanner = new Scanner(System.in);
-        Boolean runApp = true;
+        Boolean appRunning = true;
         Boolean loggedIn = false;
         Boolean isAdmin = false;
         String adminPassword = "supersecretpassword";
@@ -22,7 +20,7 @@ public class MainMenu {
         validOptions.add("4");
         validOptions.add("5");
 
-        while (runApp) {
+        while (appRunning) {
             printMainMenu();
             String userChoice = scanner.nextLine();
 
@@ -37,6 +35,10 @@ public class MainMenu {
                     Create reservation
                     Display successful reservation information
                      */
+                    // verify log in
+                    // present room options
+                    // wait for selection
+                    // book room
                 } else if (userChoice == "2"){
                     HotelResource.getInstance().getCustomerReservations(currentCustomer.email);
                 } else if (userChoice == "3"){
@@ -44,13 +46,14 @@ public class MainMenu {
                 } else if (userChoice == "4"){
                     isAdmin = adminLogin(scanner, adminPassword);
                     if (isAdmin) {
-                        System.out.println("Admin logged in");
-                        // call admin menu function.
+                        System.out.println("Admin logged in. Loading Admin Menu");
+                        System.out.println("______________________");
+                        AdminMenu.startAdminMenu();
                     } else {
                         System.out.println("Sorry, that admin password is incorrect.");
                     }
                 } else if (userChoice == "5"){
-                    runApp = false;
+                    appRunning = false;
                 }
             } else {
                 // If no valid choice enter, re-run loop.

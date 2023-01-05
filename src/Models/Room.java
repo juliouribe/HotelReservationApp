@@ -6,7 +6,7 @@ public class Room implements IRoom {
     public RoomType enumeration;
     public boolean isFree;
 
-    public Room (String roomNumber, Double price, RoomType enumeration) {
+    public Room (String roomNumber, Double price, RoomType enumeration, boolean isFree) {
         super();
         this.roomNumber  = roomNumber;
         this.price  = price;
