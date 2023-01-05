@@ -54,6 +54,7 @@ public class MainMenu {
                     }
                 } else if (userChoice == "5"){
                     appRunning = false;
+                    System.out.println("Exiting the Main Menu");
                 }
             } else {
                 // If no valid choice enter, re-run loop.

@@ -24,7 +24,7 @@ public class ReservationService {
         return roomList;
     }
     public void addRoom(IRoom room) {
-        roomList.add(roo m);
+        roomList.add(room);
     }
     public IRoom getARoom(String roomId) {
         for (IRoom iRoom : roomList) {

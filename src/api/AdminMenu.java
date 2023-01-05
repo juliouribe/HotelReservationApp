@@ -39,6 +39,7 @@ public class AdminMenu {
                     createAndAddRoom(scanner);
                 } else if (userChoice == "5") {
                     adminAppRunning = false;
+                    System.out.println("Exiting the Admin Menu");
                 }
             } else {
                 System.out.println("Please enter a valid choice of 1-5.");
