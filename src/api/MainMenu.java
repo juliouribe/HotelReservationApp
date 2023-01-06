@@ -4,14 +4,15 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import Models.Customer;
+import Models.IRoom;
+import service.ReservationService;
 
 public class MainMenu {
     public static void main(String[] args) {
-        Customer currentCustomer = new Customer("Keren", "Zendejas", "kerenz@gmail.com");
+        Customer currentCustomer = new Customer("place", "holder", "abc123@gmail.com");
         Scanner scanner = new Scanner(System.in);
         Boolean appRunning = true;
         Boolean loggedIn = false;
-        Boolean isAdmin = false;
         String adminPassword = "supersecretpassword";
         ArrayList<String> validOptions = new ArrayList<String>();
         validOptions.add("1");
@@ -36,15 +37,32 @@ public class MainMenu {
                     Display successful reservation information
                      */
                     // verify log in
-                    // present room options
-                    // wait for selection
-                    // book room
+                    if (!loggedIn) {
+                        System.out.println("Please create a customer account to login!");
+                    } else {
+                        System.out.println("Account found for user:");
+                        System.out.println(currentCustomer);
+                        // present room options
+                        System.out.println("Below are the following room options.");
+                        System.out.println("Please enter a room number, check-in date, and check-out date.");
+                        System.out.println("Ex: 101 1/1/2023 1/8/2023");
+                        String roomSelection = scanner.nextLine();
+                        String[] roomInfo = roomSelection.split("\\s+");
+                        String roomNumber = roomInfo[0];
+                        String checkIn = roomInfo[1];
+                        String checkOut = roomInfo[2];
+                        // book room
+                        IRoom desiredRoom = ReservationService.getInstance().getARoom(roomNumber);
+
+
+                    }
+
                 } else if (userChoice == "2"){
                     HotelResource.getInstance().getCustomerReservations(currentCustomer.email);
                 } else if (userChoice == "3"){
-                    createUserAccount(scanner);
+                    currentCustomer = createUserAccount(scanner);
                 } else if (userChoice == "4"){
-                    isAdmin = adminLogin(scanner, adminPassword);
+                    Boolean isAdmin = adminLogin(scanner, adminPassword);
                     if (isAdmin) {
                         System.out.println("Admin logged in. Loading Admin Menu");
                         System.out.println("______________________");
@@ -74,7 +92,7 @@ public class MainMenu {
         System.out.println("______________________");
         System.out.println("Please select a number for the menu option");
     }
-    private static void createUserAccount(Scanner scanner) {
+    private static Customer createUserAccount(Scanner scanner) {
         System.out.println("Please enter a first name, last name, and email.");
         System.out.println("Ex: Joe Mama jmom@abc.com");
         String newCustomerDetails = scanner.nextLine();
@@ -84,6 +102,7 @@ public class MainMenu {
         String email = contactInfo[2];
         HotelResource.getInstance().createACustomer(first, last, email);
         System.out.println("New customer account successfully created!");
+        return HotelResource.getInstance().getCustomer(email);
     }
     private static Boolean adminLogin(Scanner scanner, String adminPassword) {
         System.out.println("Please enter the admin password");
