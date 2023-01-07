@@ -52,7 +52,7 @@ public class MainMenu {
                         continue;
                     }
                     try {
-                        HotelResource.getInstance().getCustomerReservations(currentCustomer.email);
+                        printCustomerReservations(currentCustomer);
                     } catch (NoSuchElementException ex) {
                         System.out.println(ex.getLocalizedMessage());
                         System.out.println("Something went wrong with finding customer with that email. Try again.");
@@ -60,7 +60,8 @@ public class MainMenu {
                 } else if (userChoice.equals("3")) {
                     try {
                         currentCustomer = createUserAccount(scanner);
-                    } catch (NoSuchElementException ex) {
+                        loggedIn = true;
+                    } catch (Exception ex) {
                         System.out.println(ex.getLocalizedMessage());
                         System.out.println("Something went wrong with creating customer. Try again.");
                     }
@@ -71,7 +72,7 @@ public class MainMenu {
                         System.out.println("______________________");
                         AdminMenu.startAdminMenu();
                     } else {
-                        System.out.println("Sorry, that admin password is incorrect.");
+                        System.out.println("The admin password was incorrect. Taking you back to the main menu.");
                     }
                 } else if (userChoice.equals("5")) {
                     appRunning = false;
@@ -104,8 +105,8 @@ public class MainMenu {
                 System.out.println("For example, 2023-01-01 2023-01-08");
                 String inputDates = scanner.nextLine();
                 String[] roomDates = inputDates.split("\\s+");
-                String checkIn = roomDates[1].strip();
-                String checkOut = roomDates[2].strip();
+                String checkIn = roomDates[0].strip();
+                String checkOut = roomDates[1].strip();
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
                 LocalDate checkInDate = LocalDate.parse(checkIn, formatter);
                 LocalDate checkOutDate = LocalDate.parse(checkOut, formatter);
@@ -126,6 +127,17 @@ public class MainMenu {
             }
         }
     }
+    private static void printCustomerReservations(Customer customer) {
+        System.out.println("All current reservations:");
+        ArrayList<Reservation> allReservations = new ArrayList<>(ReservationService.getInstance().getCustomerReservation(customer));
+        if (allReservations.size() > 0) {
+            for (Reservation rez : allReservations) {
+                System.out.println(rez);
+            }
+        } else {
+            System.out.println("There are currently no reservations for this customer.");
+        }
+    }
     private static Customer createUserAccount(Scanner scanner) {
         System.out.println("Please enter a first name, last name, and email.");
         System.out.println("Ex: Jose Gonzalez jgon@abc.com");
@@ -144,7 +156,6 @@ public class MainMenu {
         if (password.equals(adminPassword)) {
             return true;
         } else {
-            System.out.println("The admin password was incorrect. Please try again from the main menu.");
             return false;
         }
     }
