@@ -1,8 +1,7 @@
 package service;
 
-import Models.Customer;
-import Models.IRoom;
-import Models.Reservation;
+import Models.*;
+
 import java.time.LocalDate;
 
 import java.util.*;
@@ -10,12 +9,30 @@ import java.util.*;
 public class ReservationService {
 
     private static ReservationService instance = new ReservationService();
-    private ArrayList<Reservation> reservationList;
-    private ArrayList<IRoom> roomList;
+    public static ArrayList<Reservation> reservationList;
+    public static ArrayList<IRoom> roomList;
 
     private ReservationService() {
-        this.reservationList = new ArrayList<Reservation>();
-        this.roomList = new ArrayList<IRoom>();
+        reservationList = new ArrayList<Reservation>();
+        roomList = new ArrayList<IRoom>();
+        Boolean notFree = false;
+        // Create some single and double rooms
+        // Create Single Rooms
+        for (int i = 1; i <= 8; i++) {
+            String singleRoomNumber = "10" + i;
+            Double singlePrice = 100.0;
+            RoomType oneBed = RoomType.SINGLE;
+            Room singleRoom = new Room(singleRoomNumber, singlePrice, oneBed, notFree);
+            roomList.add(singleRoom);
+        }
+        // Create Double Rooms
+        for (int i = 1; i <= 4; i++) {
+            String doubleRoomNumber = "20" + i;
+            Double doublePrice = 150.0;
+            RoomType twoBeds = RoomType.DOUBLE;
+            Room doubleRoom = new Room(doubleRoomNumber, doublePrice, twoBeds, notFree);
+            roomList.add(doubleRoom);
+        }
     }
     public static ReservationService getInstance() {
         return instance;

@@ -11,6 +11,7 @@ public class Room implements IRoom {
         this.roomNumber  = roomNumber;
         this.price  = price;
         this.enumeration  = enumeration;
+        this.isFree = isFree;
     }
     @Override
     public String getRoomNumber() {
