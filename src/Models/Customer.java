@@ -16,7 +16,7 @@ public class Customer {
             this.lastName = lastName;
             this.email = email;
         } else {
-            throw new IllegalArgumentException("Email must use the correct format (i.e., name@domain.com");
+            throw new IllegalArgumentException("Email must use the correct format (i.e., name@domain.com" + email);
         }
     }
 

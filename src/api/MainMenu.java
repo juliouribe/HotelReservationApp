@@ -30,7 +30,8 @@ public class MainMenu {
         while (appRunning) {
             printMainMenu();
             String userChoice = scanner.nextLine().strip();
-            System.out.println(userChoice);
+            System.out.println("You selected " + userChoice);
+            System.out.println();
 
             if (validOptions.contains(userChoice)) {
 
@@ -44,7 +45,11 @@ public class MainMenu {
                         findAndReserveARoom(scanner, currentCustomer);
                     }
                 } else if (userChoice.equals("2")) {
-                    HotelResource.getInstance().getCustomerReservations(currentCustomer.email);
+                    if (!loggedIn) {
+                        System.out.println("Customer is not logged in. Please create an account to log in!");
+                    } else {
+                        HotelResource.getInstance().getCustomerReservations(currentCustomer.email);
+                    }
                 } else if (userChoice.equals("3")) {
                     currentCustomer = createUserAccount(scanner);
                 } else if (userChoice.equals("4")) {
@@ -57,7 +62,6 @@ public class MainMenu {
                         System.out.println("Sorry, that admin password is incorrect.");
                     }
                 } else if (userChoice.equals("5")) {
-                    System.out.println("User choice passes 5 check");
                     appRunning = false;
                     System.out.println("Exiting the Main Menu");
                 }
@@ -118,6 +122,8 @@ public class MainMenu {
         String first = contactInfo[0].strip();
         String last = contactInfo[1].strip();
         String email = contactInfo[2].strip();
+        // debug code
+        System.out.println(first + " " + last + " " + email);
         HotelResource.getInstance().createACustomer(first, last, email);
         System.out.println("New customer account successfully created!");
         return HotelResource.getInstance().getCustomer(email);
