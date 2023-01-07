@@ -10,8 +10,6 @@ import java.util.*;
 import static java.util.stream.Collectors.*;
 
 public class AdminMenu {
-
-
     public static void main(String[] args) {
         startAdminMenu();
     }
@@ -27,17 +25,17 @@ public class AdminMenu {
 
         while (adminAppRunning) {
             printAdminMenu();
-            String userChoice = scanner.nextLine();
+            String userChoice = scanner.nextLine().strip();
             if (validOptions.contains(userChoice)) {
-                if (userChoice == "1") {
+                if (userChoice.equals("1")) {
                     printAllCustomers();
-                } else if (userChoice == "2") {
+                } else if (userChoice.equals("2")) {
                     printAllRooms();
-                } else if (userChoice == "3") {
+                } else if (userChoice.equals("3")) {
                     printAllReservations();
-                } else if (userChoice == "4") {
+                } else if (userChoice.equals("4")) {
                     createAndAddRoom(scanner);
-                } else if (userChoice == "5") {
+                } else if (userChoice.equals("5")) {
                     adminAppRunning = false;
                     System.out.println("Exiting the Admin Menu");
                 }
@@ -46,6 +44,7 @@ public class AdminMenu {
                 System.out.println();
             }
         }
+        scanner.close();
     }
     private static void printAdminMenu() {
         System.out.println("______________________");
@@ -78,9 +77,9 @@ public class AdminMenu {
         System.out.println("Ex: 101 55 SINGLE false");
         String roomDetails = scanner.nextLine();
         String[] roomInfo = roomDetails.split("\\s+");
-        String roomNumber = roomInfo[0];
+        String roomNumber = roomInfo[0].strip();
         Double price = Double.parseDouble(roomInfo[1]);
-        String roomTypeInput = roomInfo[2];
+        String roomTypeInput = roomInfo[2].strip();
         RoomType roomType = RoomType.SINGLE;
         if (roomTypeInput.toUpperCase() == "DOUBLE") {
             roomType = RoomType.DOUBLE;

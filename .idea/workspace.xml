@@ -6,8 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="804fbcca-a053-4dab-bf28-1454cfb027eb" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Models/Tester.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Models/Tester.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/AdminMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/AdminMenu.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/api/MainMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/MainMenu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/service/ReservationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/service/ReservationService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,6 +54,19 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="MainMenu" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="api.MainMenu" />
+      <module name="HotelReservationApp" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="api.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Tester" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Models.Tester" />
       <module name="HotelReservationApp" />
@@ -68,6 +83,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="Application.Main" />
+        <item itemvalue="Application.MainMenu" />
         <item itemvalue="Application.Tester" />
       </list>
     </recent_temporary>

@@ -29,10 +29,12 @@ public class MainMenu {
 
         while (appRunning) {
             printMainMenu();
-            String userChoice = scanner.nextLine();
+            String userChoice = scanner.nextLine().strip();
+            System.out.println(userChoice);
 
             if (validOptions.contains(userChoice)) {
-                if (userChoice == "1") {
+
+                if (userChoice.equals("1")) {
                     // Find and reserve a room
                     if (!loggedIn) {
                         System.out.println("Please create a customer account to login!");
@@ -41,11 +43,11 @@ public class MainMenu {
                         System.out.println(currentCustomer);
                         findAndReserveARoom(scanner, currentCustomer);
                     }
-                } else if (userChoice == "2"){
+                } else if (userChoice.equals("2")) {
                     HotelResource.getInstance().getCustomerReservations(currentCustomer.email);
-                } else if (userChoice == "3"){
+                } else if (userChoice.equals("3")) {
                     currentCustomer = createUserAccount(scanner);
-                } else if (userChoice == "4"){
+                } else if (userChoice.equals("4")) {
                     Boolean isAdmin = adminLogin(scanner, adminPassword);
                     if (isAdmin) {
                         System.out.println("Admin logged in. Loading Admin Menu");
@@ -54,7 +56,8 @@ public class MainMenu {
                     } else {
                         System.out.println("Sorry, that admin password is incorrect.");
                     }
-                } else if (userChoice == "5"){
+                } else if (userChoice.equals("5")) {
+                    System.out.println("User choice passes 5 check");
                     appRunning = false;
                     System.out.println("Exiting the Main Menu");
                 }
@@ -85,8 +88,8 @@ public class MainMenu {
                 System.out.println("For example, 2023-01-01 2023-01-08");
                 String inputDates = scanner.nextLine();
                 String[] roomDates = inputDates.split("\\s+");
-                String checkIn = roomDates[1];
-                String checkOut = roomDates[2];
+                String checkIn = roomDates[1].strip();
+                String checkOut = roomDates[2].strip();
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
                 LocalDate checkInDate = LocalDate.parse(checkIn, formatter);
                 LocalDate checkOutDate = LocalDate.parse(checkOut, formatter);
@@ -96,7 +99,7 @@ public class MainMenu {
                 for (IRoom room : availableRooms) {
                     System.out.println(room);
                 }
-                String roomSelection = scanner.nextLine();
+                String roomSelection = scanner.nextLine().strip();
                 IRoom desiredRoom = ReservationService.getInstance().getARoom(roomSelection);
                 // Book new reservation
                 Reservation newRez = ReservationService.getInstance().reserveARoom(currentCustomer, desiredRoom, checkInDate, checkOutDate);
@@ -112,16 +115,16 @@ public class MainMenu {
         System.out.println("Ex: Joe Mama jmom@abc.com");
         String newCustomerDetails = scanner.nextLine();
         String[] contactInfo = newCustomerDetails.split("\\s+");
-        String first = contactInfo[0];
-        String last = contactInfo[1];
-        String email = contactInfo[2];
+        String first = contactInfo[0].strip();
+        String last = contactInfo[1].strip();
+        String email = contactInfo[2].strip();
         HotelResource.getInstance().createACustomer(first, last, email);
         System.out.println("New customer account successfully created!");
         return HotelResource.getInstance().getCustomer(email);
     }
     private static Boolean adminLogin(Scanner scanner, String adminPassword) {
         System.out.println("Please enter the admin password");
-        String password = scanner.nextLine();
+        String password = scanner.nextLine().strip();
         if (password == adminPassword) {
             return true;
         } else {

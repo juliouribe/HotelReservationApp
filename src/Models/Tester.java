@@ -6,7 +6,7 @@ public class Tester {
         System.out.println(customer);
 
         try {
-            Customer badCustomer = new Customer("first", "last", "joemama");
+            Customer badCustomer = new Customer("first", "last", "isthisit");
         } catch (IllegalArgumentException ex) {
             System.out.println(ex.getLocalizedMessage());
         }
