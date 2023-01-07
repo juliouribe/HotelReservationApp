@@ -3,6 +3,7 @@ package service;
 import Models.Customer;
 import Models.IRoom;
 import Models.Reservation;
+import java.time.LocalDate;
 
 import java.util.*;
 
@@ -36,7 +37,7 @@ public class ReservationService {
         }
         return null; // Is there something better to return if rom not found?
     }
-    public Reservation reserveARoom(Customer customer, IRoom room, Date checkInDate, Date checkOutDate) {
+    public Reservation reserveARoom(Customer customer, IRoom room, LocalDate checkInDate, LocalDate checkOutDate) {
         // Add some logic to prevent double booking a room.
         // Check that this reservation doesn't already exist.
         Reservation newRez = new Reservation(customer, room, checkInDate, checkOutDate);
@@ -44,11 +45,15 @@ public class ReservationService {
         System.out.println("Room successfully booked for " + customer + " at " + room.getRoomNumber() + "!");
         return newRez;
     }
-    public Collection<IRoom> findRooms(Date checkInDate, Date checkOutDate) {
+    public Collection<IRoom> findRooms(LocalDate checkInDate, LocalDate checkOutDate) {
         Collection<IRoom> availableRooms = new ArrayList<IRoom>(roomList);
         // Iterate over existing reservations and remove any rooms that are taken for given date.
         for (Reservation rez : reservationList) {
+            // Remove room if check-in date is after an existing reservation checkout date.
             if (checkInDate.compareTo(rez.checkOutDate) > 0 ){
+                availableRooms.removeIf(room -> room == rez.room);
+            // Remove room if checkout date is after an existing reservation check-in date.
+            } else if (checkOutDate.compareTo(rez.checkInDate) > 0) {
                 availableRooms.removeIf(room -> room == rez.room);
             }
         }

@@ -1,14 +1,14 @@
 package Models;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Reservation {
     public Customer customer;
     public IRoom room;
-    public Date checkInDate;
-    public Date checkOutDate;
+    public LocalDate checkInDate;
+    public LocalDate checkOutDate;
 
-    public Reservation (Customer customer, IRoom room, Date checkInDate, Date checkOutDate) {
+    public Reservation (Customer customer, IRoom room, LocalDate checkInDate, LocalDate checkOutDate) {
         this.customer = customer;
         this.room = room;
         this.checkInDate = checkInDate;

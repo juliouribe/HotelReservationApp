@@ -1,10 +1,14 @@
 package api;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Scanner;
 
 import Models.Customer;
 import Models.IRoom;
+import Models.Reservation;
 import service.ReservationService;
 
 public class MainMenu {
@@ -42,19 +46,24 @@ public class MainMenu {
                     } else {
                         System.out.println("Account found for user:");
                         System.out.println(currentCustomer);
-                        // present room options
-                        System.out.println("Below are the following room options.");
-                        System.out.println("Please enter a room number, check-in date, and check-out date.");
-                        System.out.println("Ex: 101 1/1/2023 1/8/2023");
+                        System.out.println("Please enter a check-in and checkout date for your stay (yyyy-MM-dd)");
+                        System.out.println("For example, 2023-01-01 2023-01-08");
+                        String inputDates = scanner.nextLine();
+                        String[] roomDates = inputDates.split("\\s+");
+                        String checkIn = roomDates[1];
+                        String checkOut = roomDates[2];
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
+                        LocalDate checkInDate = LocalDate.parse(checkIn, formatter);
+                        LocalDate checkOutDate = LocalDate.parse(checkOut, formatter);
+                        System.out.println("Below are the following room options. Select using the room number (101)");
                         String roomSelection = scanner.nextLine();
-                        String[] roomInfo = roomSelection.split("\\s+");
-                        String roomNumber = roomInfo[0];
-                        String checkIn = roomInfo[1];
-                        String checkOut = roomInfo[2];
-                        // book room
-                        IRoom desiredRoom = ReservationService.getInstance().getARoom(roomNumber);
+                        IRoom desiredRoom = ReservationService.getInstance().getARoom(roomSelection);
+                        // Check existing reservations
 
-
+                        // Book new reservation
+                        Reservation newRez = ReservationService.getInstance().reserveARoom(currentCustomer, desiredRoom, checkInDate, checkOutDate);
+                        System.out.println("Reservation successfully created!");
+                        System.out.println(newRez);
                     }
 
                 } else if (userChoice == "2"){

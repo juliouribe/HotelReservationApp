@@ -2,8 +2,8 @@ package Models;
 
 public class FreeRoom extends Room {
 
-    public FreeRoom(String roomNumber, Double price, RoomType enumeration) {
-        super(roomNumber, price, enumeration);
+    public FreeRoom(String roomNumber, Double price, RoomType enumeration, Boolean isFree) {
+        super(roomNumber, price, enumeration, isFree);
         this.price = 0.0;
         this.isFree = true;
     }

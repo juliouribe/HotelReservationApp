@@ -7,7 +7,7 @@ import service.CustomerService;
 import service.ReservationService;
 
 import java.util.Collection;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.NoSuchElementException;
 
 public class HotelResource {
@@ -26,7 +26,7 @@ public class HotelResource {
     public IRoom getRoom(String roomNumber) {
         return ReservationService.getInstance().getARoom(roomNumber);
     }
-    public Reservation bookARoom (String customerEmail, IRoom room, Date checkInDate, Date checkOutDate) {
+    public Reservation bookARoom (String customerEmail, IRoom room, LocalDate checkInDate, LocalDate checkOutDate) {
         try {
             Customer bookingCustomer = CustomerService.getInstance().getCustomer(customerEmail);
             return ReservationService.getInstance().reserveARoom(bookingCustomer, room, checkInDate, checkOutDate);
@@ -39,7 +39,7 @@ public class HotelResource {
         Customer bookingCustomer = CustomerService.getInstance().getCustomer(customerEmail);
         return ReservationService.getInstance().getCustomerReservation(bookingCustomer);
     }
-    public Collection<IRoom> findARoom(Date checkIn, Date checkOut) {
+    public Collection<IRoom> findARoom(LocalDate checkIn, LocalDate checkOut) {
         return ReservationService.getInstance().findRooms(checkIn, checkOut);
     }
 }
