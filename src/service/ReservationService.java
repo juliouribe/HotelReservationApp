@@ -18,21 +18,23 @@ public class ReservationService {
         Boolean notFree = false;
         // Create some single and double rooms
         // Create Single Rooms
+        RoomType oneBed = RoomType.SINGLE;
+        Double singlePrice = 100.0;
         for (int i = 1; i <= 8; i++) {
             String singleRoomNumber = "10" + i;
-            Double singlePrice = 100.0;
-            RoomType oneBed = RoomType.SINGLE;
-            Room singleRoom = new Room(singleRoomNumber, singlePrice, oneBed, notFree);
+            Room singleRoom = new Room(singleRoomNumber, singlePrice, oneBed, notFree, false);
             roomList.add(singleRoom);
         }
         // Create Double Rooms
+        Double doublePrice = 150.0;
+        RoomType twoBeds = RoomType.DOUBLE;
         for (int i = 1; i <= 4; i++) {
             String doubleRoomNumber = "20" + i;
-            Double doublePrice = 150.0;
-            RoomType twoBeds = RoomType.DOUBLE;
-            Room doubleRoom = new Room(doubleRoomNumber, doublePrice, twoBeds, notFree);
+            Room doubleRoom = new Room(doubleRoomNumber, doublePrice, twoBeds, notFree, false);
             roomList.add(doubleRoom);
         }
+        Room pineappleRoom = new Room("301", 500.0, oneBed, notFree, true);
+        roomList.add(pineappleRoom);
     }
     public static ReservationService getInstance() {
         return instance;

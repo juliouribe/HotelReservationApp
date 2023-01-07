@@ -12,6 +12,9 @@ import service.ReservationService;
 
 public class MainMenu {
     public static void main(String[] args) {
+        runMainMenu();
+    }
+    public static void runMainMenu() {
         Customer currentCustomer = new Customer("place", "holder", "abc123@gmail.com");
         Scanner scanner = new Scanner(System.in);
         Boolean appRunning = true;
@@ -110,16 +113,21 @@ public class MainMenu {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
                 LocalDate checkInDate = LocalDate.parse(checkIn, formatter);
                 LocalDate checkOutDate = LocalDate.parse(checkOut, formatter);
-                System.out.println("Below are the following room options. Select using the room number (101)");
+                System.out.println("Below are the following room options:");
                 Collection<IRoom> availableRooms = ReservationService.getInstance().findRooms(checkInDate, checkOutDate);
                 // Show available rooms.
                 for (IRoom room : availableRooms) {
                     System.out.println(room);
                 }
+                System.out.println("Select using the room number, ex: 101");
                 String roomSelection = scanner.nextLine().strip();
                 IRoom desiredRoom = ReservationService.getInstance().getARoom(roomSelection);
+                if (desiredRoom.isPineappleRoom()) {
+                    bookPineappleRoom();
+                    break;
+                }
                 // Book new reservation
-                Reservation newRez = ReservationService.getInstance().reserveARoom(currentCustomer, desiredRoom, checkInDate, checkOutDate);
+                ReservationService.getInstance().reserveARoom(currentCustomer, desiredRoom, checkInDate, checkOutDate);
                 viewingRooms = false;
             } catch (DateTimeParseException ex) {
                 System.out.println("Sorry, please re-enter the date using the correct format (yyyy-MM-dd)");
@@ -158,5 +166,20 @@ public class MainMenu {
         } else {
             return false;
         }
+    }
+    private static void bookPineappleRoom() {
+        System.out.println("Sorry, the Pineapple Suite is booked until at least Wednesday.");
+        System.out.println("Currently there is a wonderful German couple in there and the cleaners will need at least 24 hours");
+        System.out.println("to clean the room so I'm afraid we won't be able to get you in there.");
+        System.out.println("The Presidential Suite you are in has a great view of the ocean.");
+        System.out.println("...");
+        System.out.println("You complain about this to your wife at breakfast, by the pool, while she's contemplating her career.");
+        System.out.println("You call your mother to verify you had booked the Pineapple Suite and she emails you the receipt.");
+        System.out.println("You approach the front desk man during breakfast, at dinner, and during the dinner show.");
+        System.out.println("You hunt down the front desk man in his office and refuse to take no for an answer.");
+        System.out.println("Your wife is flustered by your obsession of the Pineapple suite. Your marriage is strained.");
+        System.out.println("The front desk man has your mother fly in to join you and your fiance on your honey moon.");
+        System.out.println("...");
+        System.out.println("It's a dead end, please book a different room.");
     }
 }

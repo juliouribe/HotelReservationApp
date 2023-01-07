@@ -12,7 +12,7 @@ import java.util.Locale;
 public class ServiceTester {
     public static void main(String[] args) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
-        // Check that there are 12 rooms available and print them out.
+        // Check that there are 13 rooms available and print them out.
         Collection<IRoom> allRooms = new ArrayList<IRoom>(ReservationService.getInstance().getAllRooms());
         System.out.println(allRooms.size() + " rooms available.");
         for (IRoom room : allRooms) {

@@ -108,7 +108,7 @@ public class AdminMenu {
             roomType = RoomType.DOUBLE;
         }
         Boolean isFree = Boolean.parseBoolean(roomInfo[3]);
-        Room newRoom = new Room(roomNumber, price, roomType, isFree);
+        Room newRoom = new Room(roomNumber, price, roomType, isFree, false);
         System.out.println("New room successfully created:");
         System.out.println(newRoom);
         newRooms.add(newRoom);
