@@ -2,7 +2,9 @@ package api;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -32,40 +34,13 @@ public class MainMenu {
             if (validOptions.contains(userChoice)) {
                 if (userChoice == "1") {
                     // Find and reserve a room
-                    /*
-                    Make sure customer is logged in or offer to create account
-                    Display available starting today or offer option to view another date
-                    Once given option, offer to reserve a room
-                    Take in reservation info,
-                    Create reservation
-                    Display successful reservation information
-                     */
-                    // verify log in
                     if (!loggedIn) {
                         System.out.println("Please create a customer account to login!");
                     } else {
                         System.out.println("Account found for user:");
                         System.out.println(currentCustomer);
-                        System.out.println("Please enter a check-in and checkout date for your stay (yyyy-MM-dd)");
-                        System.out.println("For example, 2023-01-01 2023-01-08");
-                        String inputDates = scanner.nextLine();
-                        String[] roomDates = inputDates.split("\\s+");
-                        String checkIn = roomDates[1];
-                        String checkOut = roomDates[2];
-                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
-                        LocalDate checkInDate = LocalDate.parse(checkIn, formatter);
-                        LocalDate checkOutDate = LocalDate.parse(checkOut, formatter);
-                        System.out.println("Below are the following room options. Select using the room number (101)");
-                        String roomSelection = scanner.nextLine();
-                        IRoom desiredRoom = ReservationService.getInstance().getARoom(roomSelection);
-                        // Check existing reservations
-
-                        // Book new reservation
-                        Reservation newRez = ReservationService.getInstance().reserveARoom(currentCustomer, desiredRoom, checkInDate, checkOutDate);
-                        System.out.println("Reservation successfully created!");
-                        System.out.println(newRez);
+                        findAndReserveARoom(scanner, currentCustomer);
                     }
-
                 } else if (userChoice == "2"){
                     HotelResource.getInstance().getCustomerReservations(currentCustomer.email);
                 } else if (userChoice == "3"){
@@ -100,6 +75,37 @@ public class MainMenu {
         System.out.println("5. Exit");
         System.out.println("______________________");
         System.out.println("Please select a number for the menu option");
+    }
+    private static void findAndReserveARoom(Scanner scanner, Customer currentCustomer) {
+        Boolean viewingRooms = true;
+        while (viewingRooms) {
+            try {
+                // Take in a check-in and checkout date.
+                System.out.println("Please enter a check-in and checkout date for your stay (yyyy-MM-dd)");
+                System.out.println("For example, 2023-01-01 2023-01-08");
+                String inputDates = scanner.nextLine();
+                String[] roomDates = inputDates.split("\\s+");
+                String checkIn = roomDates[1];
+                String checkOut = roomDates[2];
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
+                LocalDate checkInDate = LocalDate.parse(checkIn, formatter);
+                LocalDate checkOutDate = LocalDate.parse(checkOut, formatter);
+                System.out.println("Below are the following room options. Select using the room number (101)");
+                Collection<IRoom> availableRooms = ReservationService.getInstance().findRooms(checkInDate, checkOutDate);
+                // Show available rooms.
+                for (IRoom room : availableRooms) {
+                    System.out.println(room);
+                }
+                String roomSelection = scanner.nextLine();
+                IRoom desiredRoom = ReservationService.getInstance().getARoom(roomSelection);
+                // Book new reservation
+                Reservation newRez = ReservationService.getInstance().reserveARoom(currentCustomer, desiredRoom, checkInDate, checkOutDate);
+                viewingRooms = false;
+            } catch (DateTimeParseException ex) {
+                System.out.println("Sorry, please re-enter the date using the correct format (yyyy-MM-dd)");
+                System.out.println();
+            }
+        }
     }
     private static Customer createUserAccount(Scanner scanner) {
         System.out.println("Please enter a first name, last name, and email.");

@@ -38,9 +38,18 @@ public class ReservationService {
         return null; // Is there something better to return if rom not found?
     }
     public Reservation reserveARoom(Customer customer, IRoom room, LocalDate checkInDate, LocalDate checkOutDate) {
-        // Add some logic to prevent double booking a room.
-        // Check that this reservation doesn't already exist.
         Reservation newRez = new Reservation(customer, room, checkInDate, checkOutDate);
+        // Prevent double booking and make sure this reservation doesn't already exist.
+        for (Reservation rez : reservationList) {
+            if (rez == newRez) {
+                System.out.println("This booking already exists.");
+                return rez;
+            } else if (checkInDate.compareTo(rez.checkOutDate) > 0 || checkOutDate.compareTo(rez.checkInDate) > 0){
+                System.out.println("Sorry but that room is already booked during those dates!");
+                return rez;
+            }
+        }
+
         reservationList.add(newRez);
         System.out.println("Room successfully booked for " + customer + " at " + room.getRoomNumber() + "!");
         return newRez;
@@ -49,11 +58,9 @@ public class ReservationService {
         Collection<IRoom> availableRooms = new ArrayList<IRoom>(roomList);
         // Iterate over existing reservations and remove any rooms that are taken for given date.
         for (Reservation rez : reservationList) {
-            // Remove room if check-in date is after an existing reservation checkout date.
-            if (checkInDate.compareTo(rez.checkOutDate) > 0 ){
-                availableRooms.removeIf(room -> room == rez.room);
-            // Remove room if checkout date is after an existing reservation check-in date.
-            } else if (checkOutDate.compareTo(rez.checkInDate) > 0) {
+            // Remove room if dates overlap with an existing reservation.
+            // Returns true if date 1 is after date 2.
+            if (checkInDate.compareTo(rez.checkOutDate) > 0 || checkOutDate.compareTo(rez.checkInDate) > 0){
                 availableRooms.removeIf(room -> room == rez.room);
             }
         }
