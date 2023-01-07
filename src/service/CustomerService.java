@@ -20,6 +20,12 @@ public class CustomerService {
 
 
     public void addCustomer(String firstName, String lastName, String email) {
+        for (Customer existingCustomer : customerList) {
+            if (existingCustomer.email.equals(email)) {
+                System.out.println("A customer already exists with that email: " + email);
+                return;
+            }
+        }
         Customer newCustomer = new Customer(firstName, lastName, email);
         customerList.add(newCustomer);
     }
@@ -27,11 +33,9 @@ public class CustomerService {
         for (Customer customer : customerList) {
             if (customer.email == customerEmail) {
                 return customer;
-            } else {
-                throw new NoSuchElementException("No customer found with that email!");
             }
         }
-        return null; // Is there something better to return if customer not found?
+        throw new NoSuchElementException("No customer found with that email!");
     }
     public Collection<Customer> getAllCustomers() {
         return customerList;
