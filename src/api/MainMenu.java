@@ -3,10 +3,7 @@ package api;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Locale;
-import java.util.Scanner;
+import java.util.*;
 
 import Models.Customer;
 import Models.IRoom;
@@ -43,15 +40,30 @@ public class MainMenu {
                     }
                     System.out.println("Account found for user:");
                     System.out.println(currentCustomer);
-                    findAndReserveARoom(scanner, currentCustomer);
+                    try {
+                        findAndReserveARoom(scanner, currentCustomer);
+                    } catch (Exception ex) {
+                        System.out.println(ex.getLocalizedMessage());
+                        System.out.println("Something went wrong with finding or reserving a room. Try again.");
+                    }
                 } else if (userChoice.equals("2")) {
                     if (!loggedIn) {
                         System.out.println("Customer is not logged in. Please create an account to log in!");
                         continue;
                     }
-                    HotelResource.getInstance().getCustomerReservations(currentCustomer.email);
+                    try {
+                        HotelResource.getInstance().getCustomerReservations(currentCustomer.email);
+                    } catch (NoSuchElementException ex) {
+                        System.out.println(ex.getLocalizedMessage());
+                        System.out.println("Something went wrong with finding customer with that email. Try again.");
+                    }
                 } else if (userChoice.equals("3")) {
-                    currentCustomer = createUserAccount(scanner);
+                    try {
+                        currentCustomer = createUserAccount(scanner);
+                    } catch (NoSuchElementException ex) {
+                        System.out.println(ex.getLocalizedMessage());
+                        System.out.println("Something went wrong with creating customer. Try again.");
+                    }
                 } else if (userChoice.equals("4")) {
                     Boolean isAdmin = adminLogin(scanner, adminPassword);
                     if (isAdmin) {

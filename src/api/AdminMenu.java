@@ -4,6 +4,7 @@ import Models.Customer;
 import Models.IRoom;
 import Models.Room;
 import Models.RoomType;
+import service.ReservationService;
 
 import java.util.*;
 
@@ -34,7 +35,12 @@ public class AdminMenu {
                 } else if (userChoice.equals("3")) {
                     printAllReservations();
                 } else if (userChoice.equals("4")) {
-                    createAndAddRoom(scanner);
+                    try {
+                        createAndAddRoom(scanner);
+                    } catch (Exception ex) {
+                        System.out.println(ex.getLocalizedMessage());
+                        System.out.println("Something went wrong with creating or adding a room. Try again.");
+                    }
                 } else if (userChoice.equals("5")) {
                     adminAppRunning = false;
                     System.out.println("Exiting the Admin Menu");
@@ -87,8 +93,16 @@ public class AdminMenu {
         String roomDetails = scanner.nextLine();
         String[] roomInfo = roomDetails.split("\\s+");
         String roomNumber = roomInfo[0].strip();
+        // Make sure room number isn't already taken.
+        for (IRoom room : ReservationService.roomList) {
+            if (room.getRoomNumber().equals(roomNumber)) {
+                System.out.println("That room number is already taken. Please try again with a different room number.");
+                return;
+            }
+        }
         Double price = Double.parseDouble(roomInfo[1]);
         String roomTypeInput = roomInfo[2].strip();
+        // Use default SINGLE or if user enters DOUBLE then change it. If there is a typo we will default to single.
         RoomType roomType = RoomType.SINGLE;
         if (roomTypeInput.toUpperCase() == "DOUBLE") {
             roomType = RoomType.DOUBLE;
