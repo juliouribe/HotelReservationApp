@@ -38,18 +38,18 @@ public class MainMenu {
                 if (userChoice.equals("1")) {
                     // Find and reserve a room
                     if (!loggedIn) {
-                        System.out.println("Please create a customer account to login!");
-                    } else {
-                        System.out.println("Account found for user:");
-                        System.out.println(currentCustomer);
-                        findAndReserveARoom(scanner, currentCustomer);
+                        System.out.println("Customer is not logged in. Please create an account to log in!");
+                        continue;
                     }
+                    System.out.println("Account found for user:");
+                    System.out.println(currentCustomer);
+                    findAndReserveARoom(scanner, currentCustomer);
                 } else if (userChoice.equals("2")) {
                     if (!loggedIn) {
                         System.out.println("Customer is not logged in. Please create an account to log in!");
-                    } else {
-                        HotelResource.getInstance().getCustomerReservations(currentCustomer.email);
+                        continue;
                     }
+                    HotelResource.getInstance().getCustomerReservations(currentCustomer.email);
                 } else if (userChoice.equals("3")) {
                     currentCustomer = createUserAccount(scanner);
                 } else if (userChoice.equals("4")) {
@@ -116,14 +116,12 @@ public class MainMenu {
     }
     private static Customer createUserAccount(Scanner scanner) {
         System.out.println("Please enter a first name, last name, and email.");
-        System.out.println("Ex: Joe Mama jmom@abc.com");
+        System.out.println("Ex: Jose Gonzalez jgon@abc.com");
         String newCustomerDetails = scanner.nextLine();
         String[] contactInfo = newCustomerDetails.split("\\s+");
         String first = contactInfo[0].strip();
         String last = contactInfo[1].strip();
         String email = contactInfo[2].strip();
-        // debug code
-        System.out.println(first + " " + last + " " + email);
         HotelResource.getInstance().createACustomer(first, last, email);
         System.out.println("New customer account successfully created!");
         return HotelResource.getInstance().getCustomer(email);
@@ -131,7 +129,7 @@ public class MainMenu {
     private static Boolean adminLogin(Scanner scanner, String adminPassword) {
         System.out.println("Please enter the admin password");
         String password = scanner.nextLine().strip();
-        if (password == adminPassword) {
+        if (password.equals(adminPassword)) {
             return true;
         } else {
             System.out.println("The admin password was incorrect. Please try again from the main menu.");
