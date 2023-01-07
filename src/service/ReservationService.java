@@ -91,8 +91,12 @@ public class ReservationService {
         return customerReservations;
     }
     public void printAllReservation() {
-        for (Reservation rez : reservationList) {
-            System.out.println(rez);
+        if (reservationList.size() > 0) {
+            for (Reservation rez : reservationList) {
+                System.out.println(rez);
+            }
+        } else {
+            System.out.println("There are no existing reservations.");
         }
     }
 }

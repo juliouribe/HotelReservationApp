@@ -44,7 +44,6 @@ public class AdminMenu {
                 System.out.println();
             }
         }
-        scanner.close();
     }
     private static void printAdminMenu() {
         System.out.println("______________________");
@@ -57,19 +56,29 @@ public class AdminMenu {
         System.out.println("Please select a number for the menu option");
     }
     private static void printAllCustomers() {
-        ArrayList<Customer> allCustomers = AdminResource.getInstance().getAllCustomers().stream().collect(toCollection(ArrayList::new));
-        for (Customer customer : allCustomers) {
-            System.out.println(customer);
+        System.out.println("All customers:");
+        ArrayList<Customer> allCustomers = new ArrayList<>(AdminResource.getInstance().getAllCustomers());
+        if (allCustomers.size() > 0) {
+            for (Customer customer : allCustomers) {
+                System.out.println(customer);
+            }
+        } else {
+            System.out.println("There are no current customers to display.");
         }
     }
     private static void printAllRooms() {
-        ArrayList<IRoom> allRooms = AdminResource.getInstance().getAllRooms().stream().collect(toCollection(ArrayList::new));
-        for (IRoom room : allRooms) {
-            System.out.println(room);
+        System.out.println("All current rooms:");
+        ArrayList<IRoom> allRooms = new ArrayList<>(AdminResource.getInstance().getAllRooms());
+        if (allRooms.size() > 0) {
+            for (IRoom room : allRooms) {
+                System.out.println(room);
+            }
+        } else {
+            System.out.print("There are currently no rooms to display.");
         }
     }
     private static void printAllReservations() {
-        AdminResource.getInstance().getAllRooms();
+        AdminResource.getInstance().displayAllReservations();
     }
     private static void createAndAddRoom(Scanner scanner) {
         ArrayList<IRoom> newRooms = new ArrayList<IRoom>();
