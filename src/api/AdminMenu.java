@@ -93,6 +93,14 @@ public class AdminMenu {
         String roomDetails = scanner.nextLine();
         String[] roomInfo = roomDetails.split("\\s+");
         String roomNumber = roomInfo[0].strip();
+        // Verify that an integer is given.
+        try {
+            Integer.parseInt(roomNumber);
+        } catch (NumberFormatException ex) {
+            System.out.println(ex.getLocalizedMessage());
+            System.out.println("That is not a valid room number. Please try again.");
+            return;
+        }
         // Make sure room number isn't already taken.
         for (IRoom room : ReservationService.roomList) {
             if (room.getRoomNumber().equals(roomNumber)) {
