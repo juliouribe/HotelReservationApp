@@ -1,9 +1,9 @@
 package Models;
 
 public class Room implements IRoom {
-    public String roomNumber;
+    public final String roomNumber;
     public Double price;
-    public RoomType enumeration;
+    public final RoomType enumeration;
     public boolean isFree;
     public boolean isPineappleRoom;
 
