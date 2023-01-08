@@ -34,52 +34,57 @@ public class MainMenu {
             System.out.println();
 
             if (validOptions.contains(userChoice)) {
-
-                if (userChoice.equals("1")) {
-                    // Find and reserve a room
-                    if (!loggedIn) {
-                        System.out.println("Customer is not logged in. Please create an account to log in!");
-                        continue;
-                    }
-                    System.out.println("Account found for user:");
-                    System.out.println(currentCustomer);
-                    try {
-                        findAndReserveARoom(scanner, currentCustomer);
-                    } catch (Exception ex) {
-                        System.out.println(ex.getLocalizedMessage());
-                        System.out.println("Something went wrong with finding or reserving a room. Try again.");
-                    }
-                } else if (userChoice.equals("2")) {
-                    if (!loggedIn) {
-                        System.out.println("Customer is not logged in. Please create an account to log in!");
-                        continue;
-                    }
-                    try {
-                        printCustomerReservations(currentCustomer);
-                    } catch (NoSuchElementException ex) {
-                        System.out.println(ex.getLocalizedMessage());
-                        System.out.println("Something went wrong with finding customer with that email. Try again.");
-                    }
-                } else if (userChoice.equals("3")) {
-                    try {
-                        currentCustomer = createUserAccount(scanner);
-                        loggedIn = true;
-                    } catch (Exception ex) {
-                        System.out.println(ex.getLocalizedMessage());
-                        System.out.println("Something went wrong with creating customer. Try again.");
-                    }
-                } else if (userChoice.equals("4")) {
-                    Boolean isAdmin = adminLogin(scanner, adminPassword);
-                    if (isAdmin) {
-                        System.out.println("Admin logged in. Loading Admin Menu");
-                        System.out.println("______________________");
-                        AdminMenu.startAdminMenu();
-                    } else {
-                        System.out.println("The admin password was incorrect. Taking you back to the main menu.");
-                    }
-                } else if (userChoice.equals("5")) {
-                    appRunning = false;
-                    System.out.println("Exiting the Main Menu");
+                switch (userChoice) {
+                    case "1":
+                        // Find and reserve a room
+                        if (!loggedIn) {
+                            System.out.println("Customer is not logged in. Please create an account to log in!");
+                            continue;
+                        }
+                        System.out.println("Account found for user:");
+                        System.out.println(currentCustomer);
+                        try {
+                            findAndReserveARoom(scanner, currentCustomer);
+                        } catch (Exception ex) {
+                            System.out.println(ex.getLocalizedMessage());
+                            System.out.println("Something went wrong with finding or reserving a room. Try again.");
+                        }
+                        break;
+                    case "2":
+                        if (!loggedIn) {
+                            System.out.println("Customer is not logged in. Please create an account to log in!");
+                            continue;
+                        }
+                        try {
+                            printCustomerReservations(currentCustomer);
+                        } catch (NoSuchElementException ex) {
+                            System.out.println(ex.getLocalizedMessage());
+                            System.out.println("Something went wrong with finding customer with that email. Try again.");
+                        }
+                        break;
+                    case "3":
+                        try {
+                            currentCustomer = createUserAccount(scanner);
+                            loggedIn = true;
+                        } catch (Exception ex) {
+                            System.out.println(ex.getLocalizedMessage());
+                            System.out.println("Something went wrong with creating customer. Try again.");
+                        }
+                        break;
+                    case "4":
+                        Boolean isAdmin = adminLogin(scanner, adminPassword);
+                        if (isAdmin) {
+                            System.out.println("Admin logged in. Loading Admin Menu");
+                            System.out.println("______________________");
+                            AdminMenu.startAdminMenu();
+                        } else {
+                            System.out.println("The admin password was incorrect. Taking you back to the main menu.");
+                        }
+                        break;
+                    case "5":
+                        appRunning = false;
+                        System.out.println("Exiting the Main Menu");
+                        break;
                 }
             } else {
                 // If no valid choice enter, re-run loop.
