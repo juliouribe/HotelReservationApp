@@ -56,14 +56,17 @@ public class ReservationService {
     }
     public Reservation reserveARoom(Customer customer, IRoom room, LocalDate checkInDate, LocalDate checkOutDate) {
         Reservation newRez = new Reservation(customer, room, checkInDate, checkOutDate);
-        // Prevent double booking and make sure this reservation doesn't already exist.
+        // Prevent double booking of the same room and make sure this reservation doesn't already exist.
         for (Reservation rez : reservationList) {
-            if ((rez.checkInDate == newRez.checkInDate || rez.checkOutDate == newRez.checkOutDate) &&
-                    rez.customer.email.equals(newRez.customer.email) ) {
-                System.out.println("A booking for this customer already exists with those dates!");
-                return rez;
-            } else if (checkInDate.compareTo(rez.checkOutDate) > 0 || checkOutDate.compareTo(rez.checkInDate) > 0){
-                System.out.println("Sorry but that room is already booked during those dates!");
+            // Prevent reservation if booking dates has overlap with any existing reservation.
+            if ((rez.checkInDate == newRez.checkInDate || rez.checkOutDate == newRez.checkOutDate)
+                    && (rez.room.getRoomNumber() == newRez.room.getRoomNumber())) {
+                // Print out specific message if customer is the one who owns the reservation.
+                if (rez.customer.email.equals(newRez.customer.email)) {
+                    System.out.println("A booking for this room and customer already exists with those dates!");
+                } else {
+                    System.out.println("Sorry but that room is already booked during those dates!");
+                }
                 return rez;
             }
         }
