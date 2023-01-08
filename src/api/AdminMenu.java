@@ -28,22 +28,28 @@ public class AdminMenu {
             printAdminMenu();
             String userChoice = scanner.nextLine().strip();
             if (validOptions.contains(userChoice)) {
-                if (userChoice.equals("1")) {
-                    printAllCustomers();
-                } else if (userChoice.equals("2")) {
-                    printAllRooms();
-                } else if (userChoice.equals("3")) {
-                    printAllReservations();
-                } else if (userChoice.equals("4")) {
-                    try {
-                        createAndAddRoom(scanner);
-                    } catch (Exception ex) {
-                        System.out.println(ex.getLocalizedMessage());
-                        System.out.println("Something went wrong with creating or adding a room. Try again.");
-                    }
-                } else if (userChoice.equals("5")) {
-                    adminAppRunning = false;
-                    System.out.println("Exiting the Admin Menu");
+                switch (userChoice) {
+                    case "1":
+                        printAllCustomers();
+                        break;
+                    case "2":
+                        printAllRooms();
+                        break;
+                    case "3":
+                        printAllReservations();
+                        break;
+                    case "4":
+                        try {
+                            createAndAddRoom(scanner);
+                        } catch (Exception ex) {
+                            System.out.println(ex.getLocalizedMessage());
+                            System.out.println("Something went wrong with creating or adding a room. Try again.");
+                        }
+                        break;
+                    case "5":
+                        adminAppRunning = false;
+                        System.out.println("Exiting the Admin Menu");
+                        break;
                 }
             } else {
                 System.out.println("Please enter a valid choice of 1-5.");
