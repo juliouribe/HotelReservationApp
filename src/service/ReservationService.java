@@ -58,12 +58,25 @@ public class ReservationService {
         Reservation newRez = new Reservation(customer, room, checkInDate, checkOutDate);
         // Prevent double booking of the same room and make sure this reservation doesn't already exist.
         for (Reservation rez : reservationList) {
-            // Prevent reservation if booking dates has overlap with any existing reservation.
-            if ((rez.checkInDate == newRez.checkInDate || rez.checkOutDate == newRez.checkOutDate)
-                    && (rez.room.getRoomNumber() == newRez.room.getRoomNumber())) {
-                // Print out specific message if customer is the one who owns the reservation.
+            Boolean dateOverlap = false;
+            // If the room number isn't the same, move onto the next reservation.
+            if (newRez.room.getRoomNumber() != rez.room.getRoomNumber()) {continue;}
+            // If old rez checkout date is after new rez check in date and before or equal to the new rez checkout date.
+            if (rez.checkOutDate.compareTo(newRez.checkInDate) > 0 // Old checkout after new checkIn
+                    && rez.checkOutDate.compareTo(newRez.checkOutDate) >= 0 ) { // Old checkout before or equal to new checkout
+                System.out.println("FIRST CONDITION");
+                dateOverlap = true;
+            // If old rez checkIn date is before the new rez checkout date and after or equal to the new rez checkIn date.
+            } else if (rez.checkInDate.compareTo(newRez.checkOutDate) < 0 // old checkIn before new check out.
+                && rez.checkInDate.compareTo(newRez.checkInDate) >= 0) { // old checkIn after or equal to new checkIn.
+                System.out.println("SECOND CONDITION");
+                dateOverlap = true;
+            } else {
+                System.out.println("NEVER TRUE");
+            }
+            if (dateOverlap) {
                 if (rez.customer.email.equals(newRez.customer.email)) {
-                    System.out.println("A booking for this room and customer already exists with those dates!");
+                    System.out.println("A booking for this room and customer already exists with similar dates!");
                 } else {
                     System.out.println("Sorry but that room is already booked during those dates!");
                 }
