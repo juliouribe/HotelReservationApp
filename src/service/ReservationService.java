@@ -62,17 +62,17 @@ public class ReservationService {
             // If the room number isn't the same, move onto the next reservation.
             if (newRez.room.getRoomNumber() != rez.room.getRoomNumber()) {continue;}
             // If old rez checkout date is after new rez check in date and before or equal to the new rez checkout date.
-            if (rez.checkOutDate.compareTo(newRez.checkInDate) > 0 // Old checkout after new checkIn
-                    && rez.checkOutDate.compareTo(newRez.checkOutDate) >= 0 ) { // Old checkout before or equal to new checkout
-                System.out.println("FIRST CONDITION");
+            if ( (rez.checkOutDate.compareTo(newRez.checkInDate) > 0) // Old checkout after new checkIn
+                    && (rez.checkOutDate.compareTo(newRez.checkOutDate) <= 0) ) { // Old checkout before or equal to new checkout
                 dateOverlap = true;
             // If old rez checkIn date is before the new rez checkout date and after or equal to the new rez checkIn date.
-            } else if (rez.checkInDate.compareTo(newRez.checkOutDate) < 0 // old checkIn before new check out.
-                && rez.checkInDate.compareTo(newRez.checkInDate) >= 0) { // old checkIn after or equal to new checkIn.
-                System.out.println("SECOND CONDITION");
+            } else if ((rez.checkInDate.compareTo(newRez.checkOutDate) < 0) // old checkIn before new check out.
+                && (rez.checkInDate.compareTo(newRez.checkInDate) >= 0)) { // old checkIn after or equal to new checkIn.
                 dateOverlap = true;
-            } else {
-                System.out.println("NEVER TRUE");
+            // If new rez is in the middle of the existing reservation.
+            } else if ((rez.checkInDate.compareTo(newRez.checkInDate) <= 0 ) // Old checkIn before new checkIn
+                && (rez.checkOutDate.compareTo(newRez.checkOutDate) >= 0)) { // Old checkout after new checkout
+                dateOverlap = true;
             }
             if (dateOverlap) {
                 if (rez.customer.email.equals(newRez.customer.email)) {
