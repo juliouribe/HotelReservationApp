@@ -86,7 +86,7 @@ public class AdminMenu {
                 System.out.println(room);
             }
         } else {
-            System.out.print("There are currently no rooms to display.");
+            System.out.println("There are currently no rooms to display.");
         }
     }
     private static void printAllReservations() {

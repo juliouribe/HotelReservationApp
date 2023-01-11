@@ -118,21 +118,45 @@ public class MainMenu {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
                 LocalDate checkInDate = LocalDate.parse(checkIn, formatter);
                 LocalDate checkOutDate = LocalDate.parse(checkOut, formatter);
-                System.out.println("Below are the following room options:");
+
                 Collection<IRoom> availableRooms = ReservationService.getInstance().findRooms(checkInDate, checkOutDate);
+                Boolean roomsAvailable = false;
                 // Show available rooms.
-                for (IRoom room : availableRooms) {
-                    System.out.println(room);
+                if (availableRooms.size() > 0) {
+                    roomsAvailable = true;
+                    System.out.println("Below are the following room options:");
+                    for (IRoom room : availableRooms) {
+                        System.out.println(room);
+                    }
+                } else {
+                    // If no rooms available, show rooms for the next week.
+                    System.out.println("Sorry, no rooms available for " + checkInDate + " to " + checkOutDate);
+                    checkInDate = checkInDate.plusDays(7);
+                    checkOutDate = checkOutDate.plusDays(7);
+                    System.out.println("Let see about room options for " + checkInDate + " to " + checkOutDate);
+                    Collection<IRoom> roomsNextWeek = ReservationService.getInstance().findRooms(checkInDate, checkOutDate);
+                    if (roomsNextWeek.size() > 0) {
+                        // Show available rooms.
+                        roomsAvailable = true;
+                        System.out.println("Below are the following room options:");
+                        for (IRoom room : roomsNextWeek) {
+                            System.out.println(room);
+                        }
+                    } else {
+                        System.out.println("Sorry, no rooms for these dates as well. Please try different dates.");
+                    }
                 }
-                System.out.println("Select using the room number, ex: 101");
-                String roomSelection = scanner.nextLine().strip();
-                IRoom desiredRoom = ReservationService.getInstance().getARoom(roomSelection);
-                if (desiredRoom.isPineappleRoom()) {
-                    bookPineappleRoom();
-                    break;
+                if (roomsAvailable) {
+                    System.out.println("Select using the room number, ex: 101");
+                    String roomSelection = scanner.nextLine().strip();
+                    IRoom desiredRoom = ReservationService.getInstance().getARoom(roomSelection);
+                    if (desiredRoom.isPineappleRoom()) {
+                        bookPineappleRoom();
+                        break;
+                    }
+                    // Book new reservation
+                    ReservationService.getInstance().reserveARoom(currentCustomer, desiredRoom, checkInDate, checkOutDate);
                 }
-                // Book new reservation
-                ReservationService.getInstance().reserveARoom(currentCustomer, desiredRoom, checkInDate, checkOutDate);
                 viewingRooms = false;
             } catch (DateTimeParseException ex) {
                 System.out.println("Sorry, please re-enter the date using the correct format (yyyy-MM-dd)");

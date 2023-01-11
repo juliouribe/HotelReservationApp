@@ -58,22 +58,9 @@ public class ReservationService {
         Reservation newRez = new Reservation(customer, room, checkInDate, checkOutDate);
         // Prevent double booking of the same room and make sure this reservation doesn't already exist.
         for (Reservation rez : reservationList) {
-            Boolean dateOverlap = false;
             // If the room number isn't the same, move onto the next reservation.
             if (newRez.room.getRoomNumber() != rez.room.getRoomNumber()) {continue;}
-            // If old rez checkout date is after new rez check in date and before or equal to the new rez checkout date.
-            if ( (rez.checkOutDate.compareTo(newRez.checkInDate) > 0) // Old checkout after new checkIn
-                    && (rez.checkOutDate.compareTo(newRez.checkOutDate) <= 0) ) { // Old checkout before or equal to new checkout
-                dateOverlap = true;
-            // If old rez checkIn date is before the new rez checkout date and after or equal to the new rez checkIn date.
-            } else if ((rez.checkInDate.compareTo(newRez.checkOutDate) < 0) // old checkIn before new check out.
-                && (rez.checkInDate.compareTo(newRez.checkInDate) >= 0)) { // old checkIn after or equal to new checkIn.
-                dateOverlap = true;
-            // If new rez is in the middle of the existing reservation.
-            } else if ((rez.checkInDate.compareTo(newRez.checkInDate) <= 0 ) // Old checkIn before new checkIn
-                && (rez.checkOutDate.compareTo(newRez.checkOutDate) >= 0)) { // Old checkout after new checkout
-                dateOverlap = true;
-            }
+            Boolean dateOverlap = isThereOverlap(rez.checkInDate, rez.checkOutDate, newRez.checkInDate, newRez.checkOutDate);
             if (dateOverlap) {
                 if (rez.customer.email.equals(newRez.customer.email)) {
                     System.out.println("A booking for this room and customer already exists with similar dates!");
@@ -92,8 +79,7 @@ public class ReservationService {
         // Iterate over existing reservations and remove any rooms that are taken for given date.
         for (Reservation rez : reservationList) {
             // Remove room if dates overlap with an existing reservation.
-            // Returns true if date 1 is after date 2.
-            if (checkInDate.compareTo(rez.checkOutDate) > 0 || checkOutDate.compareTo(rez.checkInDate) > 0){
+            if (isThereOverlap(rez.checkInDate, rez.checkOutDate, checkInDate, checkOutDate)){
                 availableRooms.removeIf(room -> room == rez.room);
             }
         }
@@ -116,5 +102,20 @@ public class ReservationService {
         } else {
             System.out.println("There are no existing reservations.");
         }
+    }
+    public boolean isThereOverlap(LocalDate oldCheckIn, LocalDate oldCheckOut, LocalDate newCheckIn, LocalDate newCheckout) {
+        if ( (oldCheckOut.compareTo(newCheckIn) > 0) // Old checkout after new checkIn
+                && (oldCheckOut.compareTo(newCheckout) <= 0) ) { // Old checkout before or equal to new checkout
+            return true;
+            // If old rez checkIn date is before the new rez checkout date and after or equal to the new rez checkIn date.
+        } else if ((oldCheckIn.compareTo(newCheckout) < 0) // old checkIn before new check out.
+                && (oldCheckIn.compareTo(newCheckIn) >= 0)) { // old checkIn after or equal to new checkIn.
+            return true;
+            // If new rez is in the middle of the existing reservation.
+        } else if ((oldCheckIn.compareTo(newCheckIn) <= 0 ) // Old checkIn before new checkIn
+                && (oldCheckOut.compareTo(newCheckout) >= 0)) { // Old checkout after new checkout
+            return true;
+        }
+        return false;
     }
 }
